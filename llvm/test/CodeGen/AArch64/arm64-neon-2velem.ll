@@ -16,6 +16,14 @@
 ; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vfmss_lane_f32_0
 ; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vfmss_laneq_f32_0
 ; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vfmsd_laneq_f64_0
+; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmlal_lane_s16
+; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmlal_lane_s32
+; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmlal_high_lane_s16
+; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmlal_high_lane_s32
+; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmlsl_lane_s16
+; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmlsl_lane_s32
+; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmlsl_high_lane_s16
+; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmlsl_high_lane_s32
 ; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmulh_lane_s16_intrinsic
 ; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmulh_laneq_s16_intrinsic_lo
 ; CHECK-GI-NEXT:  warning: Instruction selection used fallback path for test_vqdmulh_laneq_s16_intrinsic_hi
@@ -1682,18 +1690,11 @@ entry:
 }
 
 define <4 x i32> @test_vqdmlal_high_lane_s16(<4 x i32> %a, <8 x i16> %b, <4 x i16> %v) {
-; CHECK-SD-LABEL: test_vqdmlal_high_lane_s16:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    sqdmlal2 v0.4s, v1.8h, v2.h[3]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_vqdmlal_high_lane_s16:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    mov d1, v1.d[1]
-; CHECK-GI-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-GI-NEXT:    sqdmlal v0.4s, v1.4h, v2.h[3]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_vqdmlal_high_lane_s16:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    sqdmlal2 v0.4s, v1.8h, v2.h[3]
+; CHECK-NEXT:    ret
 entry:
   %shuffle.i = shufflevector <8 x i16> %b, <8 x i16> undef, <4 x i32> <i32 4, i32 5, i32 6, i32 7>
   %shuffle = shufflevector <4 x i16> %v, <4 x i16> undef, <4 x i32> <i32 3, i32 3, i32 3, i32 3>
@@ -1703,18 +1704,11 @@ entry:
 }
 
 define <2 x i64> @test_vqdmlal_high_lane_s32(<2 x i64> %a, <4 x i32> %b, <2 x i32> %v) {
-; CHECK-SD-LABEL: test_vqdmlal_high_lane_s32:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    sqdmlal2 v0.2d, v1.4s, v2.s[1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_vqdmlal_high_lane_s32:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    mov d1, v1.d[1]
-; CHECK-GI-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-GI-NEXT:    sqdmlal v0.2d, v1.2s, v2.s[1]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_vqdmlal_high_lane_s32:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    sqdmlal2 v0.2d, v1.4s, v2.s[1]
+; CHECK-NEXT:    ret
 entry:
   %shuffle.i = shufflevector <4 x i32> %b, <4 x i32> undef, <2 x i32> <i32 2, i32 3>
   %shuffle = shufflevector <2 x i32> %v, <2 x i32> undef, <2 x i32> <i32 1, i32 1>
@@ -1750,18 +1744,11 @@ entry:
 }
 
 define <4 x i32> @test_vqdmlsl_high_lane_s16(<4 x i32> %a, <8 x i16> %b, <4 x i16> %v) {
-; CHECK-SD-LABEL: test_vqdmlsl_high_lane_s16:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    sqdmlsl2 v0.4s, v1.8h, v2.h[3]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_vqdmlsl_high_lane_s16:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    mov d1, v1.d[1]
-; CHECK-GI-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-GI-NEXT:    sqdmlsl v0.4s, v1.4h, v2.h[3]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_vqdmlsl_high_lane_s16:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    sqdmlsl2 v0.4s, v1.8h, v2.h[3]
+; CHECK-NEXT:    ret
 entry:
   %shuffle.i = shufflevector <8 x i16> %b, <8 x i16> undef, <4 x i32> <i32 4, i32 5, i32 6, i32 7>
   %shuffle = shufflevector <4 x i16> %v, <4 x i16> undef, <4 x i32> <i32 3, i32 3, i32 3, i32 3>
@@ -1771,18 +1758,11 @@ entry:
 }
 
 define <2 x i64> @test_vqdmlsl_high_lane_s32(<2 x i64> %a, <4 x i32> %b, <2 x i32> %v) {
-; CHECK-SD-LABEL: test_vqdmlsl_high_lane_s32:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    sqdmlsl2 v0.2d, v1.4s, v2.s[1]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_vqdmlsl_high_lane_s32:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    mov d1, v1.d[1]
-; CHECK-GI-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-GI-NEXT:    sqdmlsl v0.2d, v1.2s, v2.s[1]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_vqdmlsl_high_lane_s32:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    sqdmlsl2 v0.2d, v1.4s, v2.s[1]
+; CHECK-NEXT:    ret
 entry:
   %shuffle.i = shufflevector <4 x i32> %b, <4 x i32> undef, <2 x i32> <i32 2, i32 3>
   %shuffle = shufflevector <2 x i32> %v, <2 x i32> undef, <2 x i32> <i32 1, i32 1>
@@ -4036,18 +4016,11 @@ entry:
 }
 
 define <4 x i32> @test_vqdmlal_high_lane_s16_0(<4 x i32> %a, <8 x i16> %b, <4 x i16> %v) {
-; CHECK-SD-LABEL: test_vqdmlal_high_lane_s16_0:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    sqdmlal2 v0.4s, v1.8h, v2.h[0]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_vqdmlal_high_lane_s16_0:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    mov d1, v1.d[1]
-; CHECK-GI-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-GI-NEXT:    sqdmlal v0.4s, v1.4h, v2.h[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_vqdmlal_high_lane_s16_0:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    sqdmlal2 v0.4s, v1.8h, v2.h[0]
+; CHECK-NEXT:    ret
 entry:
   %shuffle.i = shufflevector <8 x i16> %b, <8 x i16> undef, <4 x i32> <i32 4, i32 5, i32 6, i32 7>
   %shuffle = shufflevector <4 x i16> %v, <4 x i16> undef, <4 x i32> zeroinitializer
@@ -4057,18 +4030,11 @@ entry:
 }
 
 define <2 x i64> @test_vqdmlal_high_lane_s32_0(<2 x i64> %a, <4 x i32> %b, <2 x i32> %v) {
-; CHECK-SD-LABEL: test_vqdmlal_high_lane_s32_0:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    sqdmlal2 v0.2d, v1.4s, v2.s[0]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_vqdmlal_high_lane_s32_0:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    mov d1, v1.d[1]
-; CHECK-GI-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-GI-NEXT:    sqdmlal v0.2d, v1.2s, v2.s[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_vqdmlal_high_lane_s32_0:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    sqdmlal2 v0.2d, v1.4s, v2.s[0]
+; CHECK-NEXT:    ret
 entry:
   %shuffle.i = shufflevector <4 x i32> %b, <4 x i32> undef, <2 x i32> <i32 2, i32 3>
   %shuffle = shufflevector <2 x i32> %v, <2 x i32> undef, <2 x i32> zeroinitializer
@@ -4104,18 +4070,11 @@ entry:
 }
 
 define <4 x i32> @test_vqdmlsl_high_lane_s16_0(<4 x i32> %a, <8 x i16> %b, <4 x i16> %v) {
-; CHECK-SD-LABEL: test_vqdmlsl_high_lane_s16_0:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    sqdmlsl2 v0.4s, v1.8h, v2.h[0]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_vqdmlsl_high_lane_s16_0:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    mov d1, v1.d[1]
-; CHECK-GI-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-GI-NEXT:    sqdmlsl v0.4s, v1.4h, v2.h[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_vqdmlsl_high_lane_s16_0:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    sqdmlsl2 v0.4s, v1.8h, v2.h[0]
+; CHECK-NEXT:    ret
 entry:
   %shuffle.i = shufflevector <8 x i16> %b, <8 x i16> undef, <4 x i32> <i32 4, i32 5, i32 6, i32 7>
   %shuffle = shufflevector <4 x i16> %v, <4 x i16> undef, <4 x i32> zeroinitializer
@@ -4125,18 +4084,11 @@ entry:
 }
 
 define <2 x i64> @test_vqdmlsl_high_lane_s32_0(<2 x i64> %a, <4 x i32> %b, <2 x i32> %v) {
-; CHECK-SD-LABEL: test_vqdmlsl_high_lane_s32_0:
-; CHECK-SD:       // %bb.0: // %entry
-; CHECK-SD-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-SD-NEXT:    sqdmlsl2 v0.2d, v1.4s, v2.s[0]
-; CHECK-SD-NEXT:    ret
-;
-; CHECK-GI-LABEL: test_vqdmlsl_high_lane_s32_0:
-; CHECK-GI:       // %bb.0: // %entry
-; CHECK-GI-NEXT:    mov d1, v1.d[1]
-; CHECK-GI-NEXT:    // kill: def $d2 killed $d2 def $q2
-; CHECK-GI-NEXT:    sqdmlsl v0.2d, v1.2s, v2.s[0]
-; CHECK-GI-NEXT:    ret
+; CHECK-LABEL: test_vqdmlsl_high_lane_s32_0:
+; CHECK:       // %bb.0: // %entry
+; CHECK-NEXT:    // kill: def $d2 killed $d2 def $q2
+; CHECK-NEXT:    sqdmlsl2 v0.2d, v1.4s, v2.s[0]
+; CHECK-NEXT:    ret
 entry:
   %shuffle.i = shufflevector <4 x i32> %b, <4 x i32> undef, <2 x i32> <i32 2, i32 3>
   %shuffle = shufflevector <2 x i32> %v, <2 x i32> undef, <2 x i32> zeroinitializer
